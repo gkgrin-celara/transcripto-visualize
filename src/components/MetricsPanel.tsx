@@ -1,57 +1,61 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { ArrowDown, ArrowUp, Minus } from 'lucide-react';
 
 interface MetricsPanelProps {
   title: string;
   value: string | number;
-  subtitle?: string;
+  subtitle: string;
   icon: React.ReactNode;
   trend?: 'up' | 'down' | 'neutral';
-  className?: string;
 }
 
-const MetricsPanel: React.FC<MetricsPanelProps> = ({
-  title,
-  value,
-  subtitle,
+const MetricsPanel: React.FC<MetricsPanelProps> = ({ 
+  title, 
+  value, 
+  subtitle, 
   icon,
-  trend,
-  className
+  trend = 'neutral' 
 }) => {
   return (
-    <div className={cn(
-      "glass-panel panel-shadow rounded-2xl p-5 animate-scale-in",
-      className
-    )}>
-      <div className="flex justify-between items-start mb-3">
-        <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
-        <div className="p-2 rounded-full bg-primary/5">{icon}</div>
-      </div>
-      
-      <div className="space-y-1">
-        <div className="flex items-baseline">
-          <span className="metrics-value">{value}</span>
-          
-          {trend && (
-            <span className={cn(
-              "ml-2 text-xs flex items-center",
-              trend === 'up' && "text-green-500",
-              trend === 'down' && "text-red-500",
-              trend === 'neutral' && "text-muted-foreground"
-            )}>
-              {trend === 'up' && '↑ '}
-              {trend === 'down' && '↓ '}
-              {trend === 'neutral' && '→ '}
-              
-              {subtitle}
-            </span>
-          )}
+    <div className="glass-panel panel-shadow rounded-2xl p-4 animate-slide-up">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center">
+          {icon}
+          <h3 className="text-sm font-medium ml-2">{title}</h3>
         </div>
         
-        {!trend && subtitle && (
-          <p className="text-xs text-muted-foreground">{subtitle}</p>
+        {trend === 'up' && (
+          <div className="flex items-center text-green-500">
+            <ArrowUp className="h-3 w-3 mr-1" />
+            <span className="text-xs">Rising</span>
+          </div>
         )}
+        
+        {trend === 'down' && (
+          <div className="flex items-center text-red-500">
+            <ArrowDown className="h-3 w-3 mr-1" />
+            <span className="text-xs">Falling</span>
+          </div>
+        )}
+        
+        {trend === 'neutral' && (
+          <div className="flex items-center text-muted-foreground">
+            <Minus className="h-3 w-3 mr-1" />
+            <span className="text-xs">Stable</span>
+          </div>
+        )}
+      </div>
+      
+      <div className="mt-2">
+        <div className={cn(
+          "metrics-value",
+          trend === 'up' && "text-green-600",
+          trend === 'down' && "text-red-600"
+        )}>
+          {value}
+        </div>
+        <div className="metrics-label">{subtitle}</div>
       </div>
     </div>
   );

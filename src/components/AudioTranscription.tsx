@@ -1,16 +1,34 @@
-
 import React, { useState, useEffect } from 'react';
 import AudioPlayer from './AudioPlayer';
 import LiveTranscript from './LiveTranscript';
 import MetricsPanel from './MetricsPanel';
 import TranscriptPanel from './TranscriptPanel';
-import { Clock, LineChart, MicIcon, Volume2 } from 'lucide-react';
+import AudioFileSelector from './AudioFileSelector';
+import { Clock, LineChart, MicIcon } from 'lucide-react';
 
-// Sample transcript data - in a real app this would come from an API
-const sampleAudioUrl = 'https://download.samplelib.com/mp3/sample-15s.mp3';
-const sampleTranscript = `
-Welcome to our audio transcription application. This is a sample transcript that would normally be generated from your audio file using speech recognition technology. With this application, you can easily play and pause audio, see the live transcription, and view various metrics related to your audio file.
-`;
+// Update the default audio URL to use a local file
+const defaultAudioUrl = '/audios/sample1.mp3';
+
+// Update the audio files array to include local files
+const audioFiles: AudioFile[] = [
+  {
+    id: 'default',
+    name: 'Default Sample',
+    url: '/audios/sample1.mp3'
+  },
+  {
+    id: 'sample2',
+    name: 'Sample 2',
+    url: '/audios/sample2.mp3'
+  },
+  // Add more audio files as needed
+];
+
+interface AudioFile {
+  id: string;
+  name: string;
+  url: string;
+}
 
 const AudioTranscription: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -20,6 +38,23 @@ const AudioTranscription: React.FC = () => {
   const [wordCount, setWordCount] = useState(0);
   const [accuracy, setAccuracy] = useState(95);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+  const [currentAudio, setCurrentAudio] = useState<AudioFile>({
+    id: 'default',
+    name: 'Default Sample',
+    url: defaultAudioUrl
+  });
+  
+  // Sample transcript data - in a real app this would come from an API
+  const sampleTranscript = `
+Welcome to our audio transcription application. This is a sample transcript that would normally be generated from your audio file using speech recognition technology. With this application, you can easily play and pause audio, see the live transcription, and view various metrics related to your audio file.
+`;
+  
+  // Handle file selection
+  const handleSelectFile = (file: AudioFile) => {
+    // Reset state when changing files
+    handleReset();
+    setCurrentAudio(file);
+  };
   
   // Simulate transcription process
   useEffect(() => {
@@ -110,13 +145,16 @@ const AudioTranscription: React.FC = () => {
       <div className="space-y-6">
         <h1 className="text-3xl font-medium tracking-tight">Audio Transcription</h1>
         <p className="text-muted-foreground">
-          Play audio and see the live transcript. Metrics are updated in real-time.
+          Select an audio file, play it, and see the live transcript. Metrics are updated in real-time.
         </p>
         
         <div className="grid grid-cols-1 gap-6">
+          {/* Audio File Selector */}
+          <AudioFileSelector onSelectFile={handleSelectFile} />
+          
           {/* Audio Player */}
           <AudioPlayer 
-            audioUrl={sampleAudioUrl}
+            audioUrl={currentAudio.url}
             isPlaying={isPlaying}
             onPlayPause={handlePlayPause}
             onReset={handleReset}

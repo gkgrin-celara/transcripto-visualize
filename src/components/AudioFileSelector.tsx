@@ -5,12 +5,11 @@ import { Button } from "@/components/ui/button";
 import { FileAudio, FolderOpen, Play } from 'lucide-react';
 import { toast } from 'sonner';
 
-// Sample audio files for demo purposes
+// Update sample audio files to use local files from public/audios
 const sampleAudioFiles = [
-  { id: '1', name: 'Sample Audio 1', url: 'https://download.samplelib.com/mp3/sample-15s.mp3' },
-  { id: '2', name: 'Sample Audio 2', url: 'https://download.samplelib.com/mp3/sample-9s.mp3' },
-  { id: '3', name: 'Sample Audio 3', url: 'https://download.samplelib.com/mp3/sample-12s.mp3' },
-  { id: '4', name: 'Sample Audio 4', url: 'https://download.samplelib.com/mp3/sample-3s.mp3' },
+  { id: '101', name: 'Audio Sample 101', url: '/audios/101.mp3' },
+  { id: '102', name: 'Audio Sample 102', url: '/audios/102.mp3' },
+  { id: '104', name: 'Audio Sample 104', url: '/audios/104.mp3' },
 ];
 
 interface AudioFile {
@@ -157,4 +156,4 @@ const AudioFileSelector: React.FC<AudioFileSelectorProps> = ({ onSelectFile }) =
   );
 };
 
-export default AudioFileSelector; 
+export default AudioFileSelector;
